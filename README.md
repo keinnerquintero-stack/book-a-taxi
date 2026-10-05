@@ -1,16 +1,78 @@
-# React + Vite
+# Book_A_Taxi
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Front-end starter for a taxi ride booking website: a homepage, About Us,
+Services and Contact pages, and a booking page with form validation.
 
-Currently, two official plugins are available:
+## Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- React (Vite)
+- React Router for page navigation
+- Plain CSS, no UI library
 
-## React Compiler
+## Getting Started
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```bash
+npm install
+npm run dev
+```
 
-## Expanding the Oxlint configuration
+Then open http://localhost:5173.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+Other scripts:
+
+```bash
+npm run build     # production build
+npm run lint      # oxlint
+npm run preview   # serve the production build
+```
+
+## Pages
+
+| Route | Page |
+| --- | --- |
+| `/` | Home: hero, how it works, popular services |
+| `/about` | About Us |
+| `/services` | Services (each card links to the booking page with that service pre-selected) |
+| `/book` | Book a Ride (validated booking form + confirmation) |
+| `/contact` | Contact (validated contact form) |
+| `*` | 404 page |
+
+Every page shares the same layout, so the navigation bar and footer link to all
+pages from everywhere. The links are defined once in `src/data/navLinks.js`.
+
+## Booking Form Validation
+
+Validation lives in `src/utils/validation.js` and runs on blur, on change after a
+field has been visited, and on submit. Errors appear inline under each field, the
+first invalid field is focused on submit, and fields use `aria-invalid` /
+`aria-describedby` for screen readers.
+
+- Full name: required, at least 2 characters
+- Email: required, valid format
+- Phone: required, 7-15 digits
+- Service: required (pre-filled from `/book?service=<id>`)
+- Pickup and drop-off: required, and must differ
+- Date: required, not in the past
+- Time: required, not in the past when the date is today
+- Passengers: whole number from 1 to 8
+- Notes: optional, up to 300 characters
+
+On success the page shows a confirmation summary with a booking reference. There
+is no backend yet, so bookings are not stored.
+
+## Project Structure
+
+```
+src/
+  components/   Layout, Navbar, Footer, PageHeader, FormField
+  pages/        Home, About, Services, Booking, Contact, NotFound
+  data/         navLinks.js, services.js
+  utils/        validation.js
+docs/screenshots/   App screenshots
+```
+
+## Screenshots
+
+| Home | Booking validation | Confirmation |
+| --- | --- | --- |
+| ![Home](docs/screenshots/01-home.png) | ![Validation](docs/screenshots/06-booking-validation-errors.png) | ![Confirmation](docs/screenshots/08-booking-confirmation.png) |
